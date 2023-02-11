@@ -10,10 +10,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +24,10 @@ public class SuperheroControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Mock
     SuperheroService superheroService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private List<SuperheroDTO> superheroesTestList() {
         List<com.superhero.models.SuperheroDTO> superheroDTOS = new ArrayList<>();
@@ -54,6 +50,7 @@ public class SuperheroControllerTest {
         return superheroDTOS;
 
     }
+
     @Test
     public void getAllSuperheroes200OKTest() throws Exception {
 
