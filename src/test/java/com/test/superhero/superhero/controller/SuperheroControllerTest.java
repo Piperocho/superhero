@@ -1,14 +1,15 @@
 package com.test.superhero.superhero.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.superhero.models.SuperheroDTO;
 import com.test.superhero.superhero.service.SuperheroService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,7 +25,7 @@ public class SuperheroControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-    @Mock
+    @MockBean
     SuperheroService superheroService;
     @Autowired
     private ObjectMapper objectMapper;
@@ -66,7 +67,8 @@ public class SuperheroControllerTest {
 
         final String stringResponse = result.getResponse().getContentAsString();
 
-        final List<SuperheroDTO> superheroDTOS = this.objectMapper.readValue(stringResponse, List.class);
+        final List<SuperheroDTO> superheroDTOS = this.objectMapper.readValue(stringResponse, new TypeReference<List<SuperheroDTO>>() {
+        });
 
         Assertions.assertEquals(this.superheroesTestList().size(), superheroDTOS.size());
 
