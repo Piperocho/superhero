@@ -2,9 +2,7 @@ package com.test.superhero.superhero.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.superhero.models.SuperheroDTO;
 import com.test.superhero.superhero.service.SuperheroService;
-import com.test.superhero.superhero.util.SuperheroTestUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,8 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,43 +27,13 @@ public class SuperheroControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void getAllSuperheroes200OKTest() throws Exception {
-        List<com.superhero.models.SuperheroDTO> superHeroTestList = SuperheroTestUtil.superheroesTestList();
-
-        Mockito.when(superheroService.getAllSuperheroes()).thenReturn(superHeroTestList);
-
-        MvcResult result = mockMvc.perform(
-                MockMvcRequestBuilders.get("/superheroes")
-        ).andExpect(
-                status().isOk()
-        ).andExpect(
-                jsonPath("$").isNotEmpty()
-        ).andReturn();
-
-        final String stringResponse = result.getResponse().getContentAsString();
-
-        final List<SuperheroDTO> superheroDTOS = this.objectMapper.readValue(stringResponse, new TypeReference<List<SuperheroDTO>>() {
-        });
-
-        Assertions.assertEquals(superHeroTestList.size(), superheroDTOS.size());
-
-        Assertions.assertEquals(superHeroTestList.get(0).getId(), superheroDTOS.get(0).getId());
-        Assertions.assertEquals(superHeroTestList.get(0).getName(), superheroDTOS.get(0).getName());
-
-        Assertions.assertEquals(superHeroTestList.get(1).getId(), superheroDTOS.get(1).getId());
-        Assertions.assertEquals(superHeroTestList.get(1).getName(), superheroDTOS.get(1).getName());
-
-        Assertions.assertEquals(superHeroTestList.get(2).getId(), superheroDTOS.get(2).getId());
-        Assertions.assertEquals(superHeroTestList.get(2).getName(), superheroDTOS.get(2).getName());
-
-    }
-
-    @Test
     public void getSuperheroesFromId200OKTest() throws Exception {
-        SuperheroDTO superheroExpected = new SuperheroDTO();
+        com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
         superheroExpected.setId(1l);
         superheroExpected.setName("Superman");
 
+        Mockito.when(superheroService.getSuperHeroById(1l)).thenReturn(superheroExpected);
+        
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superhero/1")
         ).andExpect(
@@ -77,7 +43,7 @@ public class SuperheroControllerTest {
         ).andReturn();
 
         final String stringResponse = result.getResponse().getContentAsString();
-        final SuperheroDTO superheroReturned = this.objectMapper.readValue(stringResponse, new TypeReference<SuperheroDTO>() {
+        final com.superhero.models.SuperheroDTO superheroReturned = this.objectMapper.readValue(stringResponse, new TypeReference<com.superhero.models.SuperheroDTO>() {
         });
 
         Assertions.assertEquals(superheroExpected.getId(), superheroReturned.getId());
@@ -95,5 +61,11 @@ public class SuperheroControllerTest {
                 jsonPath("$").isNotEmpty()
         ).andReturn();
 
+        final String stringResponse = result.getResponse().getContentAsString();
+        final com.superhero.models.ErrorDTO errorReturned = this.objectMapper.readValue(stringResponse, new TypeReference<com.superhero.models.ErrorDTO>() {
+        });
+
+        Assertions.assertEquals(404, errorReturned.getCode());
+        Assertions.assertEquals("Could not fin the superhero", errorReturned.getDescriptionError());
     }
 }

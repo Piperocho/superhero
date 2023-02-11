@@ -6,14 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-public class SuperheroController implements com.superhero.api.SuperheroApi {
+public class SuperheroesController implements com.superhero.api.SuperheroesApi {
+
 
     @Autowired
     SuperheroService superheroService;
 
     @Override
-    public ResponseEntity<SuperheroDTO> getSuperheroFromId(Long id) {
-        return ResponseEntity.ok(superheroService.getSuperHeroById(id));
+    public ResponseEntity<List<SuperheroDTO>> getAllSuperheroes() {
+        return ResponseEntity.ok(superheroService.getAllSuperheroes());
     }
 }
