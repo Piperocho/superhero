@@ -18,6 +18,9 @@
 		<flyway.version>9.14.1</flyway.version>
 		<openapi.verion>1.6.14</openapi.verion>
 		<jackson.version>2.14.2</jackson.version>
+		<junit-jupiter.version>5.9.2</junit-jupiter.version>
+		<swagger-models.version>1.6.0</swagger-models.version>
+		<swagger-annotation.version>1.5.21</swagger-annotation.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -65,12 +68,12 @@
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-annotations</artifactId>
-			<version>1.5.21</version>
+			<version>${swagger-annotation.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-models</artifactId>
-			<version>1.6.0</version>
+			<version>${swagger-models.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -82,6 +85,13 @@
 			<version>${jackson.version}</version>
 		</dependency>
 
+		<!-- JUnit dependency -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
