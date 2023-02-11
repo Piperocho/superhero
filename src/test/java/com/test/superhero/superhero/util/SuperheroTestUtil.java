@@ -1,5 +1,7 @@
 package com.test.superhero.superhero.util;
 
+import com.test.superhero.superhero.api.SuperheroEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,28 @@ public class SuperheroTestUtil {
         superheroDTOS.add(superheroDTO3);
 
         return superheroDTOS;
+
+    }
+
+    public static List<SuperheroEntity> superheroesEntitiesTestList() {
+        List<SuperheroEntity> superheroEntities = new ArrayList<>();
+
+        SuperheroEntity superheroEntity1 = new SuperheroEntity();
+        superheroEntity1.setId(1l);
+        superheroEntity1.setName("Superman");
+        superheroEntities.add(superheroEntity1);
+
+        SuperheroEntity superheroEntity2 = new SuperheroEntity();
+        superheroEntity2.setId(2l);
+        superheroEntity2.setName("Spiderman");
+        superheroEntities.add(superheroEntity2);
+
+        SuperheroEntity superheroEntity3 = new SuperheroEntity();
+        superheroEntity3.setId(3l);
+        superheroEntity3.setName("Dr. Strange");
+        superheroEntities.add(superheroEntity3);
+
+        return superheroEntities;
 
     }
 }
