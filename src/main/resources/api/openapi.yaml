@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: Superhero
+  description: Application to maintain superheroes
+  contact:
+    email: carlos.ventoso714@gmail.com
+  version: 1.0.11
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: superhero
+    description: Endpoints that allow superheroes maintenance
+
+paths:
+  /superheroes:
+    get:
+      tags:
+        - superhero
+      summary: Retrieve all the superheroes
+      description: Retrieve all the superheroes
+      operationId: getAllSuperheroes
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuperheroDTO'
+components:
+  schemas:
+    SuperheroDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: 'Superman'
