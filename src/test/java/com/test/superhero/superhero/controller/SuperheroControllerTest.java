@@ -2,6 +2,7 @@ package com.test.superhero.superhero.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.test.superhero.superhero.api.Exception.EntityNotFoundException;
 import com.test.superhero.superhero.service.SuperheroService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class SuperheroControllerTest {
         superheroExpected.setName("Superman");
 
         Mockito.when(superheroService.getSuperHeroById(1l)).thenReturn(superheroExpected);
-        
+
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superhero/1")
         ).andExpect(
@@ -53,6 +54,10 @@ public class SuperheroControllerTest {
     @Test
     public void getSuperheroesFromId404KOTest() throws Exception {
 
+        EntityNotFoundException entityNotFoundException = new EntityNotFoundException("Could not find the superhero");
+
+        Mockito.when(superheroService.getSuperHeroById(2l)).thenThrow(entityNotFoundException);
+
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superhero/2")
         ).andExpect(
@@ -66,6 +71,6 @@ public class SuperheroControllerTest {
         });
 
         Assertions.assertEquals(404, errorReturned.getCode());
-        Assertions.assertEquals("Could not fin the superhero", errorReturned.getDescriptionError());
+        Assertions.assertEquals("Could not find the superhero", errorReturned.getDescriptionError());
     }
 }
