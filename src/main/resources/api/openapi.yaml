@@ -4,7 +4,7 @@ info:
   description: Application to maintain superheroes
   contact:
     email: carlos.ventoso714@gmail.com
-  version: 1.0.11
+  version: 0.0.1-SNAPSHOT
 servers:
   - url: http://localhost:8080
 tags:
@@ -28,6 +28,40 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SuperheroDTO'
+  /superhero/{id}:
+    get:
+      tags:
+        - superhero
+      summary: Retrieve one superhero from an id
+      description: Retrieve one superhero from an id
+      operationId: getSuperheroFromId
+      parameters:
+        - name: id
+          in: path
+          description: id of superhero to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuperheroDTO'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
 components:
   schemas:
     SuperheroDTO:
@@ -40,3 +74,10 @@ components:
         name:
           type: string
           example: 'Superman'
+    ErrorDTO:
+      type: object
+      properties:
+        code:
+          type: integer
+        descriptionError:
+          type: string

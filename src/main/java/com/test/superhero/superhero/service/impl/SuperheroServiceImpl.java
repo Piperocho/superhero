@@ -28,4 +28,9 @@ public class SuperheroServiceImpl implements SuperheroService {
         List<SuperheroEntity> superheroEntities = this.superheroRepository.findAll();
         return superheroMapper.asDTOs(superheroEntities);
     }
+
+    @Override
+    public SuperheroDTO getSuperHeroById(Long id) {
+        return null;
+    }
 }
