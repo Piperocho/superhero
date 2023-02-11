@@ -33,7 +33,7 @@ public class SuperheroControllerTest {
     @Test
     public void getAllSuperheroes200OKTest() throws Exception {
         List<com.superhero.models.SuperheroDTO> superHeroTestList = SuperheroTestUtil.superheroesTestList();
-        
+
         Mockito.when(superheroService.getAllSuperheroes()).thenReturn(superHeroTestList);
 
         MvcResult result = mockMvc.perform(
@@ -52,14 +52,48 @@ public class SuperheroControllerTest {
         Assertions.assertEquals(superHeroTestList.size(), superheroDTOS.size());
 
         Assertions.assertEquals(superHeroTestList.get(0).getId(), superheroDTOS.get(0).getId());
-        Assertions.assertEquals(superHeroTestList.get(0).getId(), superheroDTOS.get(0).getId());
+        Assertions.assertEquals(superHeroTestList.get(0).getName(), superheroDTOS.get(0).getName());
 
         Assertions.assertEquals(superHeroTestList.get(1).getId(), superheroDTOS.get(1).getId());
-        Assertions.assertEquals(superHeroTestList.get(1).getId(), superheroDTOS.get(1).getId());
+        Assertions.assertEquals(superHeroTestList.get(1).getName(), superheroDTOS.get(1).getName());
 
         Assertions.assertEquals(superHeroTestList.get(2).getId(), superheroDTOS.get(2).getId());
-        Assertions.assertEquals(superHeroTestList.get(2).getId(), superheroDTOS.get(2).getId());
+        Assertions.assertEquals(superHeroTestList.get(2).getName(), superheroDTOS.get(2).getName());
 
     }
 
+    @Test
+    public void getSuperheroesFromId200OKTest() throws Exception {
+        SuperheroDTO superheroExpected = new SuperheroDTO();
+        superheroExpected.setId(1l);
+        superheroExpected.setName("Superman");
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders.get("/superhero/1")
+        ).andExpect(
+                status().isOk()
+        ).andExpect(
+                jsonPath("$").isNotEmpty()
+        ).andReturn();
+
+        final String stringResponse = result.getResponse().getContentAsString();
+        final SuperheroDTO superheroReturned = this.objectMapper.readValue(stringResponse, new TypeReference<SuperheroDTO>() {
+        });
+
+        Assertions.assertEquals(superheroExpected.getId(), superheroReturned.getId());
+        Assertions.assertEquals(superheroExpected.getName(), superheroReturned.getName());
+    }
+
+    @Test
+    public void getSuperheroesFromId404KOTest() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders.get("/superhero/2")
+        ).andExpect(
+                status().is4xxClientError()
+        ).andExpect(
+                jsonPath("$").isNotEmpty()
+        ).andReturn();
+
+    }
 }
