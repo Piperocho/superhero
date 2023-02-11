@@ -21,5 +21,5 @@ public interface SuperheroService {
      * @param id the id
      * @return the super hero by id
      */
-    com.superhero.models.SuperheroDTO getSuperHeroById(Long id);
+    com.superhero.models.SuperheroDTO getSuperheroById(Long id);
 }

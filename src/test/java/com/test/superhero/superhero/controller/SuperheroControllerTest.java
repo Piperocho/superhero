@@ -33,7 +33,7 @@ public class SuperheroControllerTest {
         superheroExpected.setId(1l);
         superheroExpected.setName("Superman");
 
-        Mockito.when(superheroService.getSuperHeroById(1l)).thenReturn(superheroExpected);
+        Mockito.when(superheroService.getSuperheroById(1l)).thenReturn(superheroExpected);
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superhero/1")
@@ -56,7 +56,7 @@ public class SuperheroControllerTest {
 
         EntityNotFoundException entityNotFoundException = new EntityNotFoundException("Could not find the superhero");
 
-        Mockito.when(superheroService.getSuperHeroById(2l)).thenThrow(entityNotFoundException);
+        Mockito.when(superheroService.getSuperheroById(2l)).thenThrow(entityNotFoundException);
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superhero/2")
