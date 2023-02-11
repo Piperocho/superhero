@@ -2,8 +2,11 @@ package com.test.superhero.superhero.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.superhero.models.SuperheroDTO;
+import com.test.superhero.superhero.service.SuperheroService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +29,9 @@ public class SuperheroControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Mock
+    SuperheroService superheroService;
 
     private List<SuperheroDTO> superheroesTestList() {
         List<com.superhero.models.SuperheroDTO> superheroDTOS = new ArrayList<>();
@@ -50,6 +56,8 @@ public class SuperheroControllerTest {
     }
     @Test
     public void getAllSuperheroes200OKTest() throws Exception {
+
+        Mockito.when(superheroService.getAllSuperheroes()).thenReturn(superheroesTestList());
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superheroes")
