@@ -1,5 +1,7 @@
 package com.test.superhero.superhero.service;
 
+import com.test.superhero.superhero.api.Exception.EntityNotFoundException;
+import com.test.superhero.superhero.api.Exception.InputValidationException;
 import com.test.superhero.superhero.api.SuperheroEntity;
 import com.test.superhero.superhero.mapper.SuperheroMapper;
 import com.test.superhero.superhero.repository.SuperheroRepository;
@@ -47,14 +49,53 @@ public class SuperheroServiceImplTest {
         Assertions.assertEquals(superHeroTestList.size(), superheroDTOS.size());
 
         Assertions.assertEquals(superHeroTestList.get(0).getId(), superheroDTOS.get(0).getId());
-        Assertions.assertEquals(superHeroTestList.get(0).getId(), superheroDTOS.get(0).getId());
+        Assertions.assertEquals(superHeroTestList.get(0).getName(), superheroDTOS.get(0).getName());
 
         Assertions.assertEquals(superHeroTestList.get(1).getId(), superheroDTOS.get(1).getId());
-        Assertions.assertEquals(superHeroTestList.get(1).getId(), superheroDTOS.get(1).getId());
+        Assertions.assertEquals(superHeroTestList.get(1).getName(), superheroDTOS.get(1).getName());
 
         Assertions.assertEquals(superHeroTestList.get(2).getId(), superheroDTOS.get(2).getId());
-        Assertions.assertEquals(superHeroTestList.get(2).getId(), superheroDTOS.get(2).getId());
+        Assertions.assertEquals(superHeroTestList.get(2).getName(), superheroDTOS.get(2).getName());
 
     }
+
+    @Test
+    public void updateSuperheroOkTest() {
+
+        com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
+        superheroExpected.setId(1l);
+        superheroExpected.setName("Superwoman");
+
+        com.superhero.models.SuperheroDTO superheroReturned = this.superheroService.updateSuperhero(superheroExpected);
+
+        Assertions.assertEquals(superheroExpected.getId(), superheroReturned.getId());
+        Assertions.assertEquals(superheroExpected.getName(), superheroReturned.getName());
+
+    }
+
+    @Test
+    public void updateSuperheroNotFoundKOTest() {
+
+        com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
+        superheroExpected.setId(10l);
+        superheroExpected.setName("Superwoman");
+        Assertions.assertThrows(EntityNotFoundException.class, () -> {
+            this.superheroService.updateSuperhero(superheroExpected);
+        });
+
+    }
+
+    @Test
+    public void updateSuperheroInputExceptionKOTest() {
+
+        com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
+        superheroExpected.setId(-1l);
+        superheroExpected.setName("Superwoman");
+        Assertions.assertThrows(InputValidationException.class, () -> {
+            this.superheroService.updateSuperhero(superheroExpected);
+        });
+
+    }
+
 
 }
