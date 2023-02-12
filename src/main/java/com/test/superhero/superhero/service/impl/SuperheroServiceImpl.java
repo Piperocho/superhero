@@ -8,6 +8,7 @@ import com.test.superhero.superhero.mapper.SuperheroMapper;
 import com.test.superhero.superhero.repository.SuperheroRepository;
 import com.test.superhero.superhero.service.SuperheroService;
 import com.test.superhero.superhero.service.constant.SuperheroConstants;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -68,7 +69,13 @@ public class SuperheroServiceImpl implements SuperheroService {
 
     @Override
     public void removeSuperheroById(Long id) {
+        try {
+            this.superheroRepository.deleteById(id);
 
+        } catch (EmptyResultDataAccessException e) {
+            
+            throw new EntityNotFoundException(SuperheroConstants.SUPERHERO_NOT_FOUND);
+        }
     }
 
     private SuperheroEntity validateAndReturnEntity(SuperheroDTO superheroDTO) {
