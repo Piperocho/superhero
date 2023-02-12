@@ -168,4 +168,40 @@ public class SuperheroControllerTest {
         Assertions.assertEquals(400, errorReturned.getCode());
         Assertions.assertEquals("The id of the superhero is invalid", errorReturned.getDescriptionError());
     }
+
+    @Test
+    public void deleteSuperHero200OKTest() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders
+                        .delete("/superhero/1")
+        ).andExpect(
+                status().isOk()
+        ).andReturn();
+
+    }
+
+    @Test
+    public void deleteSuperHero404KOTest() throws Exception {
+
+        EntityNotFoundException entityNotFoundException = new EntityNotFoundException("Could not find the superhero");
+
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders
+                        .delete("/superhero/10")
+        ).andExpect(
+                status().is4xxClientError()
+        ).andExpect(
+                jsonPath("$").isNotEmpty()
+        ).andReturn();
+
+        final String stringResponse = result.getResponse().getContentAsString();
+        final com.superhero.models.ErrorDTO errorReturned = this.objectMapper.readValue(stringResponse, new TypeReference<com.superhero.models.ErrorDTO>() {
+        });
+
+        Assertions.assertEquals(404, errorReturned.getCode());
+        Assertions.assertEquals("Could not find the superhero", errorReturned.getDescriptionError());
+    }
+
 }
