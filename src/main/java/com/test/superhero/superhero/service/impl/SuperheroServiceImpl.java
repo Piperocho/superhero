@@ -56,6 +56,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional
     public SuperheroDTO updateSuperhero(SuperheroDTO superheroDTO) {
 
         SuperheroEntity superheroEntity = this.validateAndReturnEntity(superheroDTO);
@@ -68,12 +69,13 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional
     public void removeSuperheroById(Long id) {
         try {
             this.superheroRepository.deleteById(id);
 
         } catch (EmptyResultDataAccessException e) {
-            
+
             throw new EntityNotFoundException(SuperheroConstants.SUPERHERO_NOT_FOUND);
         }
     }
