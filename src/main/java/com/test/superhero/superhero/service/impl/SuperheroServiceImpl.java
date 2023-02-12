@@ -2,6 +2,7 @@ package com.test.superhero.superhero.service.impl;
 
 import com.superhero.models.SuperheroDTO;
 import com.test.superhero.superhero.api.Exception.EntityNotFoundException;
+import com.test.superhero.superhero.api.Exception.InputValidationException;
 import com.test.superhero.superhero.api.SuperheroEntity;
 import com.test.superhero.superhero.mapper.SuperheroMapper;
 import com.test.superhero.superhero.repository.SuperheroRepository;
@@ -54,7 +55,26 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
-    public SuperheroDTO updateSuperhero(SuperheroDTO body) {
-        return null;
+    public SuperheroDTO updateSuperhero(SuperheroDTO superheroDTO) {
+
+        SuperheroEntity superheroEntity = this.validateAndReturnEntity(superheroDTO);
+
+        superheroEntity.setName(superheroDTO.getName());
+
+        this.superheroRepository.save(superheroEntity);
+
+        return superheroMapper.asDTO(superheroEntity);
+    }
+
+    private SuperheroEntity validateAndReturnEntity(SuperheroDTO superheroDTO) {
+        if (superheroDTO.getId() <= 0l) {
+            throw new InputValidationException(SuperheroConstants.SUPERHERO_ID_IVALID);
+        }
+
+        Optional<SuperheroEntity> optionalSuperheroEntity = this.superheroRepository.findById(superheroDTO.getId());
+        if (!optionalSuperheroEntity.isPresent()) {
+            throw new EntityNotFoundException(SuperheroConstants.SUPERHERO_NOT_FOUND);
+        }
+        return optionalSuperheroEntity.get();
     }
 }

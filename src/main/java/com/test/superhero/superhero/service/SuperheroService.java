@@ -37,5 +37,5 @@ public interface SuperheroService {
      * @param body the body
      * @return the com . superhero . models . superhero dto
      */
-    com.superhero.models.SuperheroDTO updateSuperhero(com.superhero.models.SuperheroDTO body);
+    com.superhero.models.SuperheroDTO updateSuperhero(com.superhero.models.SuperheroDTO superheroDTO);
 }

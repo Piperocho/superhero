@@ -11,4 +11,5 @@ public interface SuperheroMapper {
     List<com.superhero.models.SuperheroDTO> asDTOs(List<SuperheroEntity> entities);
 
     com.superhero.models.SuperheroDTO asDTO(SuperheroEntity entities);
+
 }

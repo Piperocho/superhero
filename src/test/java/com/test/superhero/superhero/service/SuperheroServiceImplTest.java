@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SuperheroServiceImplTest {
 
@@ -65,6 +66,14 @@ public class SuperheroServiceImplTest {
         com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
         superheroExpected.setId(1l);
         superheroExpected.setName("Superwoman");
+
+        SuperheroEntity superheroEntity = new SuperheroEntity();
+        superheroEntity.setId(1l);
+        superheroEntity.setName("Superman");
+
+        Mockito.when(this.superheroRepository.findById(1l)).thenReturn(Optional.of(superheroEntity));
+
+        Mockito.when(this.superheroMapper.asDTO(Mockito.any(SuperheroEntity.class))).thenReturn(superheroExpected);
 
         com.superhero.models.SuperheroDTO superheroReturned = this.superheroService.updateSuperhero(superheroExpected);
 
