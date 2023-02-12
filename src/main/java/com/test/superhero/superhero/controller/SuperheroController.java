@@ -13,6 +13,12 @@ public class SuperheroController implements com.superhero.api.SuperheroApi {
     SuperheroService superheroService;
 
     @Override
+    public ResponseEntity<Void> deleteSuperheroFromId(Long id) {
+        this.superheroService.removeSuperheroById(id);
+        return null;
+    }
+
+    @Override
     public ResponseEntity<SuperheroDTO> getSuperheroFromId(Long id) {
         return ResponseEntity.ok(superheroService.getSuperheroById(id));
     }

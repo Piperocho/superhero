@@ -87,6 +87,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDTO'
+    delete:
+      tags:
+        - superhero
+      summary: Delete a superhero from an id
+      description: Delete a superhero from an id
+      operationId: deleteSuperheroFromId
+      parameters:
+        - name: id
+          in: path
+          description: id of superhero to remove
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+
   /superhero:
     put:
       tags:

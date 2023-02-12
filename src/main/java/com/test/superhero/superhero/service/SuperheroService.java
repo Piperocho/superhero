@@ -38,4 +38,11 @@ public interface SuperheroService {
      * @return the com . superhero . models . superhero dto
      */
     com.superhero.models.SuperheroDTO updateSuperhero(com.superhero.models.SuperheroDTO superheroDTO);
+
+    /**
+     * Remove superhero by id.
+     *
+     * @param id the id
+     */
+    void removeSuperheroById(Long id);
 }

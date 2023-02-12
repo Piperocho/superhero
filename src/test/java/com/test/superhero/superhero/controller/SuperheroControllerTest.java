@@ -172,6 +172,8 @@ public class SuperheroControllerTest {
     @Test
     public void deleteSuperHero200OKTest() throws Exception {
 
+        Mockito.doNothing().when(this.superheroService).removeSuperheroById(1l);
+
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders
                         .delete("/superhero/1")
@@ -186,6 +188,7 @@ public class SuperheroControllerTest {
 
         EntityNotFoundException entityNotFoundException = new EntityNotFoundException("Could not find the superhero");
 
+        Mockito.doThrow(entityNotFoundException).when(this.superheroService).removeSuperheroById(10l);
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders

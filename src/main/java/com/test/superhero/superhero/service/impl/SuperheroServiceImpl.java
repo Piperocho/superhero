@@ -66,6 +66,11 @@ public class SuperheroServiceImpl implements SuperheroService {
         return superheroMapper.asDTO(superheroEntity);
     }
 
+    @Override
+    public void removeSuperheroById(Long id) {
+
+    }
+
     private SuperheroEntity validateAndReturnEntity(SuperheroDTO superheroDTO) {
         if (superheroDTO.getId() <= 0l) {
             throw new InputValidationException(SuperheroConstants.SUPERHERO_ID_IVALID);
