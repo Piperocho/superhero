@@ -31,4 +31,11 @@ public interface SuperheroService {
     com.superhero.models.SuperheroDTO getSuperheroById(Long id);
 
 
+    /**
+     * Update superhero com . superhero . models . superhero dto.
+     *
+     * @param body the body
+     * @return the com . superhero . models . superhero dto
+     */
+    com.superhero.models.SuperheroDTO updateSuperhero(com.superhero.models.SuperheroDTO body);
 }

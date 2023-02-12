@@ -52,4 +52,9 @@ public class SuperheroServiceImpl implements SuperheroService {
 
 
     }
+
+    @Override
+    public SuperheroDTO updateSuperhero(SuperheroDTO body) {
+        return null;
+    }
 }

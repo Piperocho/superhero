@@ -3,6 +3,7 @@ package com.test.superhero.superhero.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.superhero.superhero.api.Exception.EntityNotFoundException;
+import com.test.superhero.superhero.api.Exception.InputValidationException;
 import com.test.superhero.superhero.service.SuperheroService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -83,9 +84,11 @@ public class SuperheroControllerTest {
 
         String superheroExpectedJson = this.objectMapper.writeValueAsString(superheroExpected);
 
+        Mockito.when(this.superheroService.updateSuperhero(superheroExpected)).thenReturn(superheroExpected);
+
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/superhero/1")
+                        .put("/superhero")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(superheroExpectedJson)
         ).andExpect(
@@ -104,15 +107,20 @@ public class SuperheroControllerTest {
 
     @Test
     public void modifySuperHero404KOTest() throws Exception {
+
+        EntityNotFoundException entityNotFoundException = new EntityNotFoundException("Could not find the superhero");
+
         com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
         superheroExpected.setId(10l);
         superheroExpected.setName("Superwoman");
 
         String superheroExpectedJson = this.objectMapper.writeValueAsString(superheroExpected);
 
+        Mockito.when(this.superheroService.updateSuperhero(superheroExpected)).thenThrow(entityNotFoundException);
+
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/superhero/10")
+                        .put("/superhero")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(superheroExpectedJson)
         ).andExpect(
@@ -131,15 +139,20 @@ public class SuperheroControllerTest {
 
     @Test
     public void modifySuperHero400KOTest() throws Exception {
+
+        InputValidationException inputValidationException = new InputValidationException("The id of the superhero is invalid");
+
         com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
         superheroExpected.setId(-10l);
         superheroExpected.setName("Superwoman");
 
         String superheroExpectedJson = this.objectMapper.writeValueAsString(superheroExpected);
 
+        Mockito.when(this.superheroService.updateSuperhero(superheroExpected)).thenThrow(inputValidationException);
+
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/superhero/-10")
+                        .put("/superhero")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(superheroExpectedJson)
         ).andExpect(
@@ -153,6 +166,6 @@ public class SuperheroControllerTest {
         });
 
         Assertions.assertEquals(400, errorReturned.getCode());
-        Assertions.assertEquals("The id is invalid", errorReturned.getDescriptionError());
+        Assertions.assertEquals("The id of the superhero is invalid", errorReturned.getDescriptionError());
     }
 }

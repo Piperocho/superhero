@@ -16,4 +16,10 @@ public class SuperheroController implements com.superhero.api.SuperheroApi {
     public ResponseEntity<SuperheroDTO> getSuperheroFromId(Long id) {
         return ResponseEntity.ok(superheroService.getSuperheroById(id));
     }
+
+    @Override
+    public ResponseEntity<SuperheroDTO> modifySuperhero(SuperheroDTO body) {
+        return ResponseEntity.ok(superheroService.updateSuperhero(body));
+    }
+
 }
