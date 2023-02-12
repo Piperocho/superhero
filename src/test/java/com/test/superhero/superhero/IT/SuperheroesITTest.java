@@ -9,9 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -24,20 +22,33 @@ public class SuperheroesITTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private HttpEntity<Object> getHeader() {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth("user", "password");
+
+        return new HttpEntity<>(headers);
+    }
+
     @Test
     public void retrieveAllSuperheroesTest() {
 
-        ResponseEntity<List<com.superhero.models.SuperheroDTO>> response = restTemplate.exchange("/superheroes", HttpMethod.GET, null, new ParameterizedTypeReference<List<com.superhero.models.SuperheroDTO>>() {
+        HttpEntity<Object> objectHttpEntity = getHeader();
+
+        ResponseEntity<List<com.superhero.models.SuperheroDTO>> response = restTemplate.exchange("/superheroes", HttpMethod.GET, objectHttpEntity, new ParameterizedTypeReference<List<com.superhero.models.SuperheroDTO>>() {
         });
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(5, response.getBody().size());
 
     }
-    
+
+    @Test
     public void retrieveSuperheroesFromNameTest() {
 
-        ResponseEntity<List<com.superhero.models.SuperheroDTO>> response = restTemplate.exchange("/superheroes/findByName?name=man", HttpMethod.GET, null, new ParameterizedTypeReference<List<com.superhero.models.SuperheroDTO>>() {
+        HttpEntity<Object> objectHttpEntity = getHeader();
+
+        ResponseEntity<List<com.superhero.models.SuperheroDTO>> response = restTemplate.exchange("/superheroes/findByName?name=man", HttpMethod.GET, objectHttpEntity, new ParameterizedTypeReference<List<com.superhero.models.SuperheroDTO>>() {
         });
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());

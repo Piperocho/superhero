@@ -9,10 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,10 +20,20 @@ public class SuperheroITTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private HttpEntity<Object> getHeader() {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth("user", "password");
+
+        return new HttpEntity<>(headers);
+    }
+
     @Test
     public void getSuperHeroById200OKTest() {
 
-        ResponseEntity<com.superhero.models.SuperheroDTO> response = restTemplate.exchange("/superhero/3", HttpMethod.GET, null, new ParameterizedTypeReference<com.superhero.models.SuperheroDTO>() {
+        HttpEntity<Object> objectHttpEntity = getHeader();
+
+        ResponseEntity<com.superhero.models.SuperheroDTO> response = restTemplate.exchange("/superhero/3", HttpMethod.GET, objectHttpEntity, new ParameterizedTypeReference<com.superhero.models.SuperheroDTO>() {
         });
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -37,7 +44,9 @@ public class SuperheroITTest {
     @Test
     public void getSuperHeroById404OKTest() {
 
-        ResponseEntity<com.superhero.models.ErrorDTO> response = restTemplate.exchange("/superhero/7", HttpMethod.GET, null, new ParameterizedTypeReference<com.superhero.models.ErrorDTO>() {
+        HttpEntity<Object> objectHttpEntity = getHeader();
+
+        ResponseEntity<com.superhero.models.ErrorDTO> response = restTemplate.exchange("/superhero/7", HttpMethod.GET, objectHttpEntity, new ParameterizedTypeReference<com.superhero.models.ErrorDTO>() {
         });
 
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -48,7 +57,9 @@ public class SuperheroITTest {
     @Test
     public void modifySuperHeroById200OKTest() {
 
-        ResponseEntity<com.superhero.models.SuperheroDTO> response = restTemplate.exchange("/superhero/1", HttpMethod.GET, null, new ParameterizedTypeReference<com.superhero.models.SuperheroDTO>() {
+        HttpEntity<Object> objectHttpEntity = getHeader();
+
+        ResponseEntity<com.superhero.models.SuperheroDTO> response = restTemplate.exchange("/superhero/1", HttpMethod.GET, objectHttpEntity, new ParameterizedTypeReference<com.superhero.models.SuperheroDTO>() {
         });
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -57,11 +68,15 @@ public class SuperheroITTest {
         com.superhero.models.SuperheroDTO superheroDTO = new SuperheroDTO();
         superheroDTO.setId(1l);
         superheroDTO.setName("Superwoman");
-        HttpEntity<SuperheroDTO> superheroDTOHttpEntity = new HttpEntity<>(superheroDTO);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth("admin", "password");
+
+        HttpEntity<SuperheroDTO> superheroDTOHttpEntity = new HttpEntity<>(superheroDTO, headers);
         restTemplate.exchange("/superhero", HttpMethod.PUT, superheroDTOHttpEntity, new ParameterizedTypeReference<com.superhero.models.SuperheroDTO>() {
         });
 
-        ResponseEntity<com.superhero.models.SuperheroDTO> finalResponse = restTemplate.exchange("/superhero/1", HttpMethod.GET, null, new ParameterizedTypeReference<com.superhero.models.SuperheroDTO>() {
+        ResponseEntity<com.superhero.models.SuperheroDTO> finalResponse = restTemplate.exchange("/superhero/1", HttpMethod.GET, objectHttpEntity, new ParameterizedTypeReference<com.superhero.models.SuperheroDTO>() {
         });
 
         Assertions.assertEquals(HttpStatus.OK, finalResponse.getStatusCode());

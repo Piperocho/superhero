@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,6 +61,7 @@ public class SuperheroesControllerTest {
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superheroes")
+                        .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("user:password".getBytes()))
         ).andExpect(
                 status().isOk()
         ).andExpect(
@@ -92,6 +94,7 @@ public class SuperheroesControllerTest {
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superheroes/findByName?name=man")
+                        .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("user:password".getBytes()))
         ).andExpect(
                 status().isOk()
         ).andExpect(
@@ -116,6 +119,7 @@ public class SuperheroesControllerTest {
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superheroes/findByName?name=evil")
+                        .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("user:password".getBytes()))
         ).andExpect(
                 status().isOk()
         ).andExpect(

@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Base64;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,6 +42,7 @@ public class SuperheroControllerTest {
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superhero/1")
+                        .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("user:password".getBytes()))
         ).andExpect(
                 status().isOk()
         ).andExpect(
@@ -62,6 +66,7 @@ public class SuperheroControllerTest {
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/superhero/2")
+                        .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("user:password".getBytes()))
         ).andExpect(
                 status().is4xxClientError()
         ).andExpect(
@@ -89,6 +94,7 @@ public class SuperheroControllerTest {
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders
                         .put("/superhero")
+                        .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("admin:password".getBytes()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(superheroExpectedJson)
         ).andExpect(
@@ -121,6 +127,7 @@ public class SuperheroControllerTest {
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders
                         .put("/superhero")
+                        .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("admin:password".getBytes()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(superheroExpectedJson)
         ).andExpect(
@@ -153,6 +160,7 @@ public class SuperheroControllerTest {
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders
                         .put("/superhero")
+                        .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("admin:password".getBytes()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(superheroExpectedJson)
         ).andExpect(
@@ -177,6 +185,7 @@ public class SuperheroControllerTest {
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders
                         .delete("/superhero/1")
+                        .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("admin:password".getBytes()))
         ).andExpect(
                 status().isOk()
         ).andReturn();
@@ -184,6 +193,7 @@ public class SuperheroControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = "admin")
     public void deleteSuperHero404KOTest() throws Exception {
 
         EntityNotFoundException entityNotFoundException = new EntityNotFoundException("Could not find the superhero");
