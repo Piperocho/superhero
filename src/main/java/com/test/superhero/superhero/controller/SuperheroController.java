@@ -1,12 +1,14 @@
 package com.test.superhero.superhero.controller;
 
 import com.superhero.models.SuperheroDTO;
+import com.test.superhero.superhero.config.annotations.LogExecutionTime;
 import com.test.superhero.superhero.service.SuperheroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@LogExecutionTime
 public class SuperheroController implements com.superhero.api.SuperheroApi {
 
     @Autowired
