@@ -19,15 +19,10 @@ public class LoggingAspect {
 
         Object result = null;
 
-        try {
-            result = joinPoint.proceed();
-        } catch (Throwable e) {
-
-            throw e;
-        } finally {
-            long endTime = System.currentTimeMillis();
-            log.info("{} executed in {} ms", joinPoint.getSignature().toShortString(), endTime - startTime);
-            return result;
-        }
+        result = joinPoint.proceed();
+        long endTime = System.currentTimeMillis();
+        log.info("{} executed in {} ms", joinPoint.getSignature().toShortString(), endTime - startTime);
+        return result;
+        
     }
 }
