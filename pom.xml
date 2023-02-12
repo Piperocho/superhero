@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.test.superhero</groupId>
     <artifactId>superhero</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>superhero</name>
     <description>Application to maintain superheroes</description>
     <properties>
