@@ -4,6 +4,7 @@ import com.superhero.models.SuperheroDTO;
 import com.test.superhero.superhero.config.annotations.LogExecutionTime;
 import com.test.superhero.superhero.service.SuperheroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,7 @@ public class SuperheroesController implements com.superhero.api.SuperheroesApi {
     }
 
     @Override
+    @Cacheable(value = "superheroes", key = "#name")
     public ResponseEntity<List<SuperheroDTO>> getSuperheroesByName(String name) {
         return ResponseEntity.ok(superheroService.getSuperheroesByName(name));
     }
