@@ -35,7 +35,8 @@ public class SuperheroServiceImpl implements SuperheroService {
     @Override
     @Transactional
     public List<SuperheroDTO> getSuperheroesByName(String name) {
-        return null;
+        List<SuperheroEntity> superheroEntities = this.superheroRepository.findByNameContainingIgnoreCase(name);
+        return superheroMapper.asDTOs(superheroEntities);
     }
 
     @Override
