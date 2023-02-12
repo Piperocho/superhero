@@ -16,10 +16,19 @@ public interface SuperheroService {
     List<com.superhero.models.SuperheroDTO> getAllSuperheroes();
 
     /**
+     * Gets superheroes by name.
+     *
+     * @return the superheroes by name
+     */
+    List<com.superhero.models.SuperheroDTO> getSuperheroesByName(String name);
+
+    /**
      * Gets super hero by id.
      *
      * @param id the id
      * @return the super hero by id
      */
     com.superhero.models.SuperheroDTO getSuperheroById(Long id);
+
+
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.superhero.models.SuperheroDTO;
 import com.test.superhero.superhero.service.SuperheroService;
 import com.test.superhero.superhero.util.SuperheroTestUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,6 +33,22 @@ public class SuperheroesControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    public static List<com.superhero.models.SuperheroDTO> superheroesByNameTestList() {
+        List<com.superhero.models.SuperheroDTO> superheroDTOS = new ArrayList<>();
+
+        com.superhero.models.SuperheroDTO superheroDTO1 = new com.superhero.models.SuperheroDTO();
+        superheroDTO1.setId(1l);
+        superheroDTO1.setName("Superman");
+        superheroDTOS.add(superheroDTO1);
+
+        com.superhero.models.SuperheroDTO superheroDTO2 = new com.superhero.models.SuperheroDTO();
+        superheroDTO2.setId(2l);
+        superheroDTO2.setName("Manolito el fuerte");
+        superheroDTOS.add(superheroDTO2);
+
+        return superheroDTOS;
+
+    }
 
     @Test
     public void getAllSuperheroes200OKTest() throws Exception {
@@ -65,9 +84,12 @@ public class SuperheroesControllerTest {
 
     @Test
     public void getSuperheroesByName200OKFoundResultsTest() throws Exception {
+        List<com.superhero.models.SuperheroDTO> superHeroTestList = this.superheroesByNameTestList();
+
+        Mockito.when(this.superheroService.getSuperheroesByName("man")).thenReturn(superHeroTestList);
 
         MvcResult result = mockMvc.perform(
-                MockMvcRequestBuilders.get("/superheroes?name=man")
+                MockMvcRequestBuilders.get("/superheroes/findByName?name=man")
         ).andExpect(
                 status().isOk()
         ).andExpect(
@@ -81,27 +103,22 @@ public class SuperheroesControllerTest {
 
         Assertions.assertEquals(2, superheroDTOS.size());
 
-        superheroDTOS.forEach(superheroDTO -> Assertions.assertTrue(superheroDTO.getName().contains("man")));
+        superheroDTOS.forEach(superheroDTO -> Assertions.assertTrue(StringUtils.containsIgnoreCase(superheroDTO.getName(), ("man"))));
 
     }
 
     @Test
     public void getSuperheroesByName200OKNotFoundResultsTest() throws Exception {
 
+        Mockito.when(this.superheroService.getSuperheroesByName("evil")).thenReturn(Collections.emptyList());
+
         MvcResult result = mockMvc.perform(
-                MockMvcRequestBuilders.get("/superheroes?name=evil")
+                MockMvcRequestBuilders.get("/superheroes/findByName?name=evil")
         ).andExpect(
                 status().isOk()
         ).andExpect(
-                jsonPath("$").isNotEmpty()
+                jsonPath("$").isEmpty()
         ).andReturn();
-
-        final String stringResponse = result.getResponse().getContentAsString();
-
-        final List<SuperheroDTO> superheroDTOS = this.objectMapper.readValue(stringResponse, new TypeReference<List<SuperheroDTO>>() {
-        });
-
-        Assertions.assertEquals(0, superheroDTOS.size());
 
     }
 

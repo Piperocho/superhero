@@ -33,6 +33,13 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
+    @Transactional
+    public List<SuperheroDTO> getSuperheroesByName(String name) {
+        return null;
+    }
+
+    @Override
+    @Transactional
     public SuperheroDTO getSuperheroById(Long id) {
         Optional<SuperheroEntity> optionalSuperheroEntity = this.superheroRepository.findById(id);
 

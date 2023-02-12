@@ -19,4 +19,9 @@ public class SuperheroesController implements com.superhero.api.SuperheroesApi {
     public ResponseEntity<List<SuperheroDTO>> getAllSuperheroes() {
         return ResponseEntity.ok(superheroService.getAllSuperheroes());
     }
+
+    @Override
+    public ResponseEntity<List<SuperheroDTO>> getSuperheroesByName(String name) {
+        return ResponseEntity.ok(superheroService.getSuperheroesByName(name));
+    }
 }
