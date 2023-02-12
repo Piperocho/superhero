@@ -30,6 +30,7 @@ public class SuperheroesControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
     @Test
     public void getAllSuperheroes200OKTest() throws Exception {
         List<com.superhero.models.SuperheroDTO> superHeroTestList = SuperheroTestUtil.superheroesTestList();
@@ -59,6 +60,48 @@ public class SuperheroesControllerTest {
 
         Assertions.assertEquals(superHeroTestList.get(2).getId(), superheroDTOS.get(2).getId());
         Assertions.assertEquals(superHeroTestList.get(2).getName(), superheroDTOS.get(2).getName());
+
+    }
+
+    @Test
+    public void getSuperheroesByName200OKFoundResultsTest() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders.get("/superheroes?name=man")
+        ).andExpect(
+                status().isOk()
+        ).andExpect(
+                jsonPath("$").isNotEmpty()
+        ).andReturn();
+
+        final String stringResponse = result.getResponse().getContentAsString();
+
+        final List<SuperheroDTO> superheroDTOS = this.objectMapper.readValue(stringResponse, new TypeReference<List<SuperheroDTO>>() {
+        });
+
+        Assertions.assertEquals(2, superheroDTOS.size());
+
+        superheroDTOS.forEach(superheroDTO -> Assertions.assertTrue(superheroDTO.getName().contains("man")));
+
+    }
+
+    @Test
+    public void getSuperheroesByName200OKNotFoundResultsTest() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders.get("/superheroes?name=evil")
+        ).andExpect(
+                status().isOk()
+        ).andExpect(
+                jsonPath("$").isNotEmpty()
+        ).andReturn();
+
+        final String stringResponse = result.getResponse().getContentAsString();
+
+        final List<SuperheroDTO> superheroDTOS = this.objectMapper.readValue(stringResponse, new TypeReference<List<SuperheroDTO>>() {
+        });
+
+        Assertions.assertEquals(0, superheroDTOS.size());
 
     }
 
