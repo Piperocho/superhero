@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -72,5 +73,86 @@ public class SuperheroControllerTest {
 
         Assertions.assertEquals(404, errorReturned.getCode());
         Assertions.assertEquals("Could not find the superhero", errorReturned.getDescriptionError());
+    }
+
+    @Test
+    public void modifySuperHero200OKTest() throws Exception {
+        com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
+        superheroExpected.setId(1l);
+        superheroExpected.setName("Superwoman");
+
+        String superheroExpectedJson = this.objectMapper.writeValueAsString(superheroExpected);
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post("/superhero/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(superheroExpectedJson)
+        ).andExpect(
+                status().isOk()
+        ).andExpect(
+                jsonPath("$").isNotEmpty()
+        ).andReturn();
+
+        final String stringResponse = result.getResponse().getContentAsString();
+        final com.superhero.models.SuperheroDTO superheroReturned = this.objectMapper.readValue(stringResponse, new TypeReference<com.superhero.models.SuperheroDTO>() {
+        });
+
+        Assertions.assertEquals(superheroExpected.getId(), superheroReturned.getId());
+        Assertions.assertEquals(superheroExpected.getName(), superheroReturned.getName());
+    }
+
+    @Test
+    public void modifySuperHero404KOTest() throws Exception {
+        com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
+        superheroExpected.setId(10l);
+        superheroExpected.setName("Superwoman");
+
+        String superheroExpectedJson = this.objectMapper.writeValueAsString(superheroExpected);
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post("/superhero/10")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(superheroExpectedJson)
+        ).andExpect(
+                status().is4xxClientError()
+        ).andExpect(
+                jsonPath("$").isNotEmpty()
+        ).andReturn();
+
+        final String stringResponse = result.getResponse().getContentAsString();
+        final com.superhero.models.ErrorDTO errorReturned = this.objectMapper.readValue(stringResponse, new TypeReference<com.superhero.models.ErrorDTO>() {
+        });
+
+        Assertions.assertEquals(404, errorReturned.getCode());
+        Assertions.assertEquals("Could not find the superhero", errorReturned.getDescriptionError());
+    }
+
+    @Test
+    public void modifySuperHero400KOTest() throws Exception {
+        com.superhero.models.SuperheroDTO superheroExpected = new com.superhero.models.SuperheroDTO();
+        superheroExpected.setId(-10l);
+        superheroExpected.setName("Superwoman");
+
+        String superheroExpectedJson = this.objectMapper.writeValueAsString(superheroExpected);
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post("/superhero/-10")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(superheroExpectedJson)
+        ).andExpect(
+                status().is4xxClientError()
+        ).andExpect(
+                jsonPath("$").isNotEmpty()
+        ).andReturn();
+
+        final String stringResponse = result.getResponse().getContentAsString();
+        final com.superhero.models.ErrorDTO errorReturned = this.objectMapper.readValue(stringResponse, new TypeReference<com.superhero.models.ErrorDTO>() {
+        });
+
+        Assertions.assertEquals(400, errorReturned.getCode());
+        Assertions.assertEquals("The id is invalid", errorReturned.getDescriptionError());
     }
 }
